@@ -6,9 +6,10 @@ $db = mysql_connect("localhost","root","");
 mysql_select_db('storage',$db);
 mysql_query('SET names "utf8"');
 
-$hide = "style='display:none;'";
-$show = "style='display:block;'";
+$hide_me = "style='display:none;'";
+$show_me = "style='display:block;'";
 $number = -1;
+$login=false;
 
 	//Запускаем глобальную переменную "Сессия". 
 session_start();
@@ -29,17 +30,7 @@ function imageresize($outfile,$infile,$neww,$newh,$quality){
 	$vert_image = false;	
 	$gor_image = false;
 	$kvadrat = false;
-	$im=imagecreatefromjpeg($infile);
-	
-	if( imagesx($im) > imagesy($im) ){
-		$gor_image = true;
-	}
-	if( imagesx($im) < imagesy($im) ){
-		$vert_image = true;
-	}
-	if( imagesx($im) == imagesy($im) ){
-		$kvadrat = true;
-	}
+	$im=ImageCreateFromJpeg($infile);
 	
 	$im1=imagecreatetruecolor($neww,$newh);
 	imagecopyresampled($im1,$im,0,0,0,0,$neww,$newh,imagesx($im),imagesy($im));
@@ -117,7 +108,6 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 	<title>Редактор: Постоянный состав</title>
 	<link rel="stylesheet" href="css/jquery-ui.css">
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="../../for_all/design/nav.css">
 	<link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
 	<script src="js/jq_1.5.2.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
@@ -129,19 +119,33 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 <body>
 <div class="darken"></div>
 	<header>
-		<div class="header_name_user"><?= ($_SESSION['sname'] !='')?($_SESSION['ssurname']." ".$_SESSION['sname']." ".$_SESSION['sfathername']):( ($login)?("Пароль введен неверно"):( ($number == 0)?"Такого пользователя не существует":"" ) )?> <?= $aqds;?></div>
+		<div class="header_name_user">
+<?
+		if($_SESSION['sname'] !=''){
+			echo ($_SESSION['ssurname']." ".$_SESSION['sname']." ".$_SESSION['sfathername']);
+		} else {
+		 	echo ( ($login)?("Пароль введен неверно"):("Такого пользователя не существует") );
+		}
+?> 
+		</div>
 		<ul>
-			<li class="autorization_button" <?= ($_SESSION['sname'] !='')?($hide):""?>>Авторизация</li>
-			<li class="header_element out" <?= ($_SESSION['sname'] =='')?($hide):""?>>
+			<li class="autorization_button"<? if($_SESSION['sname'] !=''){
+				echo "style='display:none;'";
+			} else {
+				echo "";
+			}
+			?> Авторизация</li>
+			<li class="header_element out" <? if($_SESSION['sname']==''){
+				echo "style='display:none;'";
+			} else {
+				echo "";
+			}?>
 				<form action="" method="post">
 					<input type="submit" name="out" class="out" value="Выход">
 				</form>
 			</li>
 		</ul>
 	</header>
-	<?
-	include_once("../for_all/design/nav.php"); 
-	?>
 	<!-- Поле авторизации -->
 	<div class="autorization_area" >
 		<div class="area_head">Введите логин и пароль</div>
@@ -176,7 +180,7 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 		<input type="button" class="message_button" value="Добавить нового (Enter)">
 	</div>
 
-	<a class="header" href="/users/"> Редактор: Постоянный состав </a>
+	<a class="header" href="http://localhost/"> Редактор: Постоянный состав </a>
 	<div class="main">
 		<div class="avatar"></div>
 		<div class="user_year">???</div>
