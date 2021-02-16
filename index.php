@@ -50,16 +50,21 @@ function imageresize($outfile,$infile,$neww,$newh,$quality){
 
 //Если нажата кнопка авторизации
 if(isset($_POST["autoriz_submit"])){
+	//Если логин и пароль введены
 	$autorization_login = $_POST["autoriz_login"];
 	$autorization_password = $_POST["autoriz_password"];
 
+	//То делаем запрос к базе. Ищем запись с таким логином
 	$query = mysql_query("SELECT * FROM `users` WHERE `login`='".$autorization_login."'");
 	$number = mysql_num_rows($query);
 
+	//Если количество таких записей не равно нулю, то сохраняем запись в переменную row
 	if($number!=0) $rows = mysql_fetch_assoc($query);
 
+	//Если количество записей равно одному, то скажем, что такой пользователь есть. Посмотрим на пароль...
 	if($number == 1){
 		$login = true;
+		//Если пароль введён верно, то сохраняем все значения записи в переменные сессии
 		if($autorization_password == $rows["password"]){
 			$autorization = true;
 			$_SESSION['slogin'] = $autorization_login;
