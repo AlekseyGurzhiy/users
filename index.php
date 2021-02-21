@@ -113,7 +113,6 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/datepicker-ru.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
-	<script src="js/script.js"></script>
 
 </head>
 <body>
@@ -253,5 +252,6 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 			</div>
 		</form>		
 	</div>
+<script src="js/script.js"></script>
 </body>
 </html>

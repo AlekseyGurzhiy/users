@@ -27,7 +27,7 @@ function get_current_age(date) {
 function get_info_user(surname,name,fathername,date_user){
 	$.ajax({
 		type: "POST",
-		url: "http://localhost/execute/get_info_user.php",
+		url: "get_info_user.php",
 		dataType: "json",
 		data: "surname="+surname+"&name="+name+"&fathername="+fathername+"&date_user="+date_user,
 		success: function(response){
@@ -242,7 +242,7 @@ $(document).ready(function(){
 		}
 
 		if(event.keyCode == 27){
-			window.location.href = "http://192.168.5.6/users/";
+			window.location.href = "http://localhost/";
 		}
 	});
 
