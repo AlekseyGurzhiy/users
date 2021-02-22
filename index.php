@@ -9,9 +9,11 @@ $hide_me = "style='display:none;'";
 $show_me = "style='display:block;'";
 $number = -1;
 $login=false;
+$autorization=false;
 
 	//Запускаем глобальную переменную "Сессия". 
 session_start();
+$_SESSION['sname'] = '';
 
 	//Если нажата кнопка "Выход", то уничтожаем сессию
 if(isset($_POST['out'])){
@@ -73,7 +75,7 @@ if (isset($_POST['my_button'])){
 	//Получаем полное и краткое имя к файлу
 	$filename = $_FILES["input_foto"]["name"];
 	$tmp_filename = $_FILES["input_foto"]["tmp_name"];
-	$full_filename = $_SERVER['DOCUMENT_ROOT']."/for_all/avatar/".$filename;
+	$full_filename = "avatar/".$filename;
 			
 	if(is_uploaded_file($tmp_filename)){
 		imageresize($full_filename,$tmp_filename,150,200,75);
@@ -82,13 +84,13 @@ if (isset($_POST['my_button'])){
 
 	//Если это новый сотрудник, то вносим в базу новую запись с его данными, если старый то изменяем существующую
 	if ($_POST['new_old'] == 0) {
-		mysqli_query("INSERT INTO `users` (`surname`,`name`,`fathername`,`date`,`avatar`,`otdel`,`otdelenie`,`phone`,`phone_city`,`room`,`corps`,`id_job`,`id_range`,`rools`,`id_range_employ`,`status`) VALUES ('".$_POST['input_surname']."','".$_POST['input_name']."','".$_POST['input_fathername']."','".date("Y-m-d",strtotime($_POST['input_date']))."','".$filename."','".$_POST['select_otdel']."','0','".$_POST['input_phone_mini']."','".$_POST['input_phone']."','".$_POST['input_kabinet']."','".$_POST['select_korpus']."','".$_POST['select_job']."','".$_POST['select_range']."','user','".$_POST['select_range_employ']."','".$_POST['input_status']."')");
+		mysqli_query($link,"INSERT INTO `users` (`surname`,`name`,`fathername`,`date`,`avatar`,`otdel`,`otdelenie`,`phone`,`phone_city`,`room`,`corps`,`id_job`,`id_range`,`rools`,`id_range_employ`,`status`) VALUES ('".$_POST['input_surname']."','".$_POST['input_name']."','".$_POST['input_fathername']."','".date("Y-m-d",strtotime($_POST['input_date']))."','".$filename."','".$_POST['select_otdel']."','0','".$_POST['input_phone_mini']."','".$_POST['input_phone']."','".$_POST['input_kabinet']."','".$_POST['select_korpus']."','".$_POST['select_job']."','".$_POST['select_range']."','user','".$_POST['select_range_employ']."','".$_POST['input_status']."')");
 	} else {
 		//Если файл выбрали, то имя нового файла сохраняем в базу, иначе ячейку с именем файла не трогаем
 		if($filename!=''){
-			mysqli_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`avatar`='".$filename."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
+			mysqli_query($link,"UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`avatar`='".$filename."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
 		} else {
-			mysqli_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
+			mysqli_query($link,"UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
 		}
 		
 	}
@@ -122,21 +124,21 @@ $query_range_employ = mysqli_query($link,"SELECT * FROM `range_employ`");
 		if($_SESSION['sname'] !=''){
 			echo ($_SESSION['ssurname']." ".$_SESSION['sname']." ".$_SESSION['sfathername']);
 		} else {
-		 	echo ( ($login)?("Пароль введен неверно"):("Такого пользователя не существует") );
+		 	echo ( ($login)?("Пароль введен неверно"):("Авторизируйтесть в системе -->") );
 		}
 ?> 
 		</div>
 		<ul>
-			<li class="autorization_button"<?php if($_SESSION['sname'] !=''){
-				echo "style='display:none;'";
+			<li class="autorization_button" <?php if($autorization){
+				echo $hide_me;
 			} else {
-				echo "";
+				echo $show_me;
 			}
 			?>> Авторизация</li>
-			<li class="header_element out" <?php if($_SESSION['sname']==''){
-				echo "style='display:none;'";
+			<li class="header_element out" <?php if(!$autorization){
+				echo $hide_me;
 			} else {
-				echo "";
+				echo $show_me;
 			}?>>
 				<form action="" method="post">
 					<input type="submit" name="out" class="out" value="Выход">
@@ -198,30 +200,30 @@ $query_range_employ = mysqli_query($link,"SELECT * FROM `range_employ`");
 				<label id="label_otdel" for="input_otdel">Подразделение:</label>	
 				<select name="select_otdel" id="input_otdel">
 					<option value="0" selected>Выберите подразделение</option>
-					<? while($row = mysql_fetch_assoc($query)){ ?>
-					<option value="<?=$row['id'];?>"><?=$row['name'];?></option>
-					<? } ?>
+					<?php while($row = mysqli_fetch_assoc($query)){ ?>
+					<option value="<?php echo $row['id'];?>"><?php echo$row['name'];?></option>
+					<?php } ?>
 				</select>
 				<div class="clear"></div>
 				<label id="label_job" for="input_job">Должность:</label>	
 				<select name="select_job" id="input_job">
-					<? while($row_job = mysql_fetch_assoc($query_job)){ ?>
-					<option title="<?=$row_job['job_otdel'];?>" value="<?=$row_job['id'];?>"><?=$row_job['name'];?></option>
-					<? } ?>
+					<?php while($row_job = mysqli_fetch_assoc($query_job)){ ?>
+					<option title="<?php echo $row_job['job_otdel'];?>" value="<?php echo $row_job['id'];?>"><?php echo $row_job['name'];?></option>
+					<?php } ?>
 				</select>
 				<div class="clear"></div>
 				<label id="label_range" for="input_range">Звание:</label>	
 				<select name="select_range" id="input_range">
-					<? while($row_range = mysql_fetch_assoc($query_range)){ ?>
+					<?php while($row_range = mysqli_fetch_assoc($query_range)){ ?>
 					<option value="<?=$row_range['id'];?>"><?=$row_range['name'];?></option>
-					<? } ?>
+					<?php } ?>
 				</select>
 				<div class="clear"></div>
 				<label id="label_range_employ" for="input_range_employ">Служба:</label>	
 				<select name="select_range_employ" id="input_range_employ">
-					<? while($row_range_employ = mysql_fetch_assoc($query_range_employ)){ ?>
+					<?php while($row_range_employ = mysqli_fetch_assoc($query_range_employ)){ ?>
 					<option value="<?=$row_range_employ['id'];?>"><?=$row_range_employ['name'];?></option>
-					<? } ?>
+					<?php } ?>
 				</select>
 				<div class="clear"></div>
 

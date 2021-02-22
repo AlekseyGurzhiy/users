@@ -28,6 +28,7 @@ function get_info_user(surname,name,fathername,date_user){
 	$.ajax({
 		type: "POST",
 		url: "/execute/get_info_user.php",
+		dataType: "json",
 		data: "surname="+surname+"&name="+name+"&fathername="+fathername+"&date_user="+date_user,
 		success: function(response){
 			$("a.header").html("Новый поиск! (Esc)");
@@ -87,7 +88,7 @@ function get_info_user(surname,name,fathername,date_user){
 				$("#input_fathername").val(response[3]);
 				$("#input_date").val(response[4]);
 				if(response[5]!=''){
-					$(".avatar").html("<img src='http://192.168.5.6/for_all/avatar/"+response[5]+"' alt=''>");
+					$(".avatar").html("<img src='avatar/"+response[5]+"' alt=''>");
 				}
 				$("#input_otdel").val(response[6]);
 				$("#input_phone_mini").val(response[8]);
@@ -132,7 +133,7 @@ function get_info_user(surname,name,fathername,date_user){
 function get_info_user_id(id_user){
 	$.ajax({
 		type: "POST",
-		url: "/users/execute/get_info_user_id.php",
+		url: "/execute/get_info_user_id.php",
 		dataType: "json",
 		data: "id_user="+id_user,
 		success: function(response){
@@ -141,7 +142,7 @@ function get_info_user_id(id_user){
 			$("#input_fathername").val(response[3]);
 			$("#input_date").val(response[4]);
 			if(response[5]!=''){
-				$(".avatar").html("<img src='http://192.168.5.6/for_all/avatar/"+response[5]+"' alt=''>");
+				$(".avatar").html("<img src='avatar/"+response[5]+"' alt=''>");
 			}
 			$("#input_otdel").val(response[6]);
 			$("#input_phone_mini").val(response[8]);
