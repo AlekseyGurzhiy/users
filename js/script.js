@@ -28,7 +28,6 @@ function get_info_user(surname,name,fathername,date_user){
 	$.ajax({
 		type: "POST",
 		url: "/execute/get_info_user.php",
-		dataType: "json",
 		data: "surname="+surname+"&name="+name+"&fathername="+fathername+"&date_user="+date_user,
 		success: function(response){
 			$("a.header").html("Новый поиск! (Esc)");

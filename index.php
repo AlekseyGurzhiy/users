@@ -2,9 +2,8 @@
 	//Указываем всем браузерам, что кодировка должна быть UTF-8
 header("Content-Type: text/html; charset=utf-8");  
 	//Подключаемся к базе
-$db = mysql_connect("127.0.0.1","root","");
-mysql_select_db('storage',$db);
-mysql_query('SET names "utf8"');
+$link = mysqli_connect("localhost","root","","storage");
+mysqli_query($link,'SET names "utf8"');
 
 $hide_me = "style='display:none;'";
 $show_me = "style='display:block;'";
@@ -46,11 +45,11 @@ if(isset($_POST["autoriz_submit"])){
 	$autorization_password = $_POST["autoriz_password"];
 
 	//То делаем запрос к базе. Ищем запись с таким логином
-	$query = mysql_query("SELECT * FROM `users` WHERE `login`='".$autorization_login."'");
-	$number = mysql_num_rows($query);
+	$query = mysqli_query($link,"SELECT * FROM `users` WHERE `login`='".$autorization_login."'");
+	$number = mysqli_num_rows($query);
 
 	//Если количество таких записей не равно нулю, то сохраняем запись в переменную row
-	if($number!=0) $rows = mysql_fetch_assoc($query);
+	if($number!=0) $rows = mysqli_fetch_assoc($query);
 
 	//Если количество записей равно одному, то скажем, что такой пользователь есть. Посмотрим на пароль...
 	if($number == 1){
@@ -83,22 +82,22 @@ if (isset($_POST['my_button'])){
 
 	//Если это новый сотрудник, то вносим в базу новую запись с его данными, если старый то изменяем существующую
 	if ($_POST['new_old'] == 0) {
-		mysql_query("INSERT INTO `users` (`surname`,`name`,`fathername`,`date`,`avatar`,`otdel`,`otdelenie`,`phone`,`phone_city`,`room`,`corps`,`id_job`,`id_range`,`rools`,`id_range_employ`,`status`) VALUES ('".$_POST['input_surname']."','".$_POST['input_name']."','".$_POST['input_fathername']."','".date("Y-m-d",strtotime($_POST['input_date']))."','".$filename."','".$_POST['select_otdel']."','0','".$_POST['input_phone_mini']."','".$_POST['input_phone']."','".$_POST['input_kabinet']."','".$_POST['select_korpus']."','".$_POST['select_job']."','".$_POST['select_range']."','user','".$_POST['select_range_employ']."','".$_POST['input_status']."')");
+		mysqli_query("INSERT INTO `users` (`surname`,`name`,`fathername`,`date`,`avatar`,`otdel`,`otdelenie`,`phone`,`phone_city`,`room`,`corps`,`id_job`,`id_range`,`rools`,`id_range_employ`,`status`) VALUES ('".$_POST['input_surname']."','".$_POST['input_name']."','".$_POST['input_fathername']."','".date("Y-m-d",strtotime($_POST['input_date']))."','".$filename."','".$_POST['select_otdel']."','0','".$_POST['input_phone_mini']."','".$_POST['input_phone']."','".$_POST['input_kabinet']."','".$_POST['select_korpus']."','".$_POST['select_job']."','".$_POST['select_range']."','user','".$_POST['select_range_employ']."','".$_POST['input_status']."')");
 	} else {
 		//Если файл выбрали, то имя нового файла сохраняем в базу, иначе ячейку с именем файла не трогаем
 		if($filename!=''){
-			mysql_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`avatar`='".$filename."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
+			mysqli_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`avatar`='".$filename."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
 		} else {
-			mysql_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
+			mysqli_query("UPDATE `users` SET `surname`='".$_POST['input_surname']."',`name`='".$_POST['input_name']."',`fathername`='".$_POST['input_fathername']."',`date`='".date("Y-m-d",strtotime($_POST['input_date']))."',`otdel`='".$_POST['select_otdel']."',`otdelenie`='0',`phone`='".$_POST['input_phone_mini']."',`phone_city`='".$_POST['input_phone']."',`room`='".$_POST['input_kabinet']."',`corps`='".$_POST['select_korpus']."',`id_job`='".$_POST['select_job']."',`id_range`='".$_POST['select_range']."',`id_range_employ`='".$_POST['select_range_employ']."',`status`='".$_POST['input_status']."' WHERE `id`='".$_POST['new_old']."'");			
 		}
 		
 	}
 }
 
-$query = mysql_query("SELECT * FROM `pulpit`");
-$query_job = mysql_query("SELECT * FROM `job` ORDER BY `priority`");
-$query_range = mysql_query("SELECT * FROM `range`");
-$query_range_employ = mysql_query("SELECT * FROM `range_employ`");
+$query = mysqli_query($link,"SELECT * FROM `pulpit`");
+$query_job = mysqli_query($link,"SELECT * FROM `job` ORDER BY `priority`");
+$query_range = mysqli_query($link,"SELECT * FROM `range`");
+$query_range_employ = mysqli_query($link,"SELECT * FROM `range_employ`");
 ?>
 
 <!DOCTYPE html>
@@ -119,7 +118,7 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 <div class="darken"></div>
 	<header>
 		<div class="header_name_user">
-<?
+<?php
 		if($_SESSION['sname'] !=''){
 			echo ($_SESSION['ssurname']." ".$_SESSION['sname']." ".$_SESSION['sfathername']);
 		} else {
@@ -128,17 +127,17 @@ $query_range_employ = mysql_query("SELECT * FROM `range_employ`");
 ?> 
 		</div>
 		<ul>
-			<li class="autorization_button"<? if($_SESSION['sname'] !=''){
+			<li class="autorization_button"<?php if($_SESSION['sname'] !=''){
 				echo "style='display:none;'";
 			} else {
 				echo "";
 			}
-			?> Авторизация</li>
-			<li class="header_element out" <? if($_SESSION['sname']==''){
+			?>> Авторизация</li>
+			<li class="header_element out" <?php if($_SESSION['sname']==''){
 				echo "style='display:none;'";
 			} else {
 				echo "";
-			}?>
+			}?>>
 				<form action="" method="post">
 					<input type="submit" name="out" class="out" value="Выход">
 				</form>
