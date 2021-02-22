@@ -1,8 +1,8 @@
-<?
+<?php
 	//Указываем всем браузерам, что кодировка должна быть UTF-8
 header("Content-Type: text/html; charset=utf-8");  
 	//Подключаемся к базе
-$db = mysql_connect("localhost","root","");
+$db = mysql_connect("127.0.0.1","root","");
 mysql_select_db('storage',$db);
 mysql_query('SET names "utf8"');
 

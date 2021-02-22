@@ -1,4 +1,4 @@
-<?
+<?php
 	header("Content-Type: text/html; charset=utf-8");
 	$db = mysql_connect("localhost","root","");
 	mysql_select_db('storage',$db);
